@@ -1,12 +1,4 @@
-﻿#
-
-# 5Year.ps1
-
-# Author: Chris Phillips
-
-# Description: Converts 5 year treasury prices from fraction to decimal
-
-# Creation Date: 2019-05-17
+﻿# Creation Date: 2019-05-17
 
 #
 
@@ -26,7 +18,7 @@ function entry_price
 
 #Begin script execution
 entry_price
-$entry_arr = $entry -split {$delim -contains $_}
+[decimal[]]$entry_arr = $entry -split {$delim -contains $_}
 if ( $entry_arr[2] = 0) { 
         $entry_arr[2] = 0 
         }
@@ -39,12 +31,8 @@ if ( $entry_arr[2] = 0) {
       elseif ( $entry_arr[2] = 7 ) { 
         $entry_arr[2] = (.0078125 * 3) 
         }
-      else { $entry_arr[2] = 9 }
+      else { throw "Enter a valid price" }
 
-if ( $entry_arr[2] = 9 ) {
-		entry_price
-		}
-
-$entry_dec = [int]$entry_arr[0] + ([int]$entry_arr[1] * .03125) + [int]$entry_arr[2]
+$entry_dec = $entry_arr[0] + ($entry_arr[1] * .03125) + $entry_arr[2]
 
 $entry_dec
