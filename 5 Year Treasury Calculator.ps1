@@ -68,5 +68,22 @@ if ($exit_arr[1] -lt 0 -or $exit_arr[1] -gt 31) {
 
 $entry_dec = $entry_arr[0] + ($entry_arr[1] * .03125) + $quarters_entry
 $exit_dec = $exit_arr[0] + ($exit_arr[1] * .03125) + $quarters_exit
+$zone = $entry_dec - $exit_dec
+if ($zone -lt 0) {
+			Write-Host "This is a short trade"
+				}
+		else {
+			Write-Host "This is a long trade"
+			}
+$target1x = $entry_dec + $zone
+$target2x = $entry_dec + ($zone * 2)
+$target3x = $entry_dec + ($zone * 3)
+$target4x = $entry_dec + ($zone * 4)
+$target5x = $entry_dec + ($zone * 5)
 write-host "The entry $entry is",$entry_dec
 write-host "The exit $exit is",$exit_dec
+Write-Host "Target 1x is", $target1x
+Write-Host "Target 1x is", $target2x
+Write-Host "Target 1x is", $target3x
+Write-Host "Target 1x is", $target4x
+Write-Host "Target 1x is", $target5x
