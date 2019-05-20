@@ -71,10 +71,10 @@ $entry_dec = $entry_arr[0] + ($entry_arr[1] * .03125) + $quarters_entry
 $exit_dec = $exit_arr[0] + ($exit_arr[1] * .03125) + $quarters_exit
 $zone = $entry_dec - $exit_dec
 if ($zone -lt 0) {
-			Write-Host "This is a short trade"
+			Write-Host "`nThis is a short trade`n"
 				}
 		else {
-			Write-Host "This is a long trade"
+			Write-Host "`nThis is a long trade`n"
 			}
 $target1 = $entry_dec + $zone
 $target2 = $entry_dec + ($zone * 2)
@@ -154,8 +154,10 @@ $target5_fr =  $target5_arr[0] + "'" + $target5_32_arr[0] + "." + $target5_quart
 
 write-host "The entry $entry is",$entry_dec
 write-host "The exit $exit is",$exit_dec
-Write-Host "Target 1x is", $target1_fr, $target1
+Write-Host "`nTarget 1x is", $target1_fr, $target1
 Write-Host "Target 2x is", $target2_fr, $target2
 Write-Host "Target 3x is", $target3_fr, $target3
 Write-Host "Target 4x is", $target4_fr, $target4
 Write-Host "Target 5x is", $target5_fr, $target5
+
+$pause = Read-Host "`nPress any key to continue"
