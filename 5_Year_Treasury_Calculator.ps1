@@ -76,15 +76,86 @@ if ($zone -lt 0) {
 		else {
 			Write-Host "This is a long trade"
 			}
-$target1x = $entry_dec + $zone
-$target2x = $entry_dec + ($zone * 2)
-$target3x = $entry_dec + ($zone * 3)
-$target4x = $entry_dec + ($zone * 4)
-$target5x = $entry_dec + ($zone * 5)
+$target1 = $entry_dec + $zone
+$target2 = $entry_dec + ($zone * 2)
+$target3 = $entry_dec + ($zone * 3)
+$target4 = $entry_dec + ($zone * 4)
+$target5 = $entry_dec + ($zone * 5)
+
+$target1_arr = $target1 -split {$delim -contains $_}
+$target1_32_arr = ($target1_arr[1]/312500) -split {$delim -contains $_}
+if ($target1_32_arr -eq 25) {
+    $target1_quarter = 2
+    }
+    elseif ($target1x_32_arr -eq 50) {
+    $target1_quarter = 5
+    }
+    elseif ($target1x_32_arr -eq 75) {
+    $target1_quarter = 7
+    }
+    else {$target1_quarter = 0}
+$target1_fr =  $target1_arr[0] + "'" + $target1_32_arr[0] + "." + $target1_quarter
+
+$target2_arr = $target2 -split {$delim -contains $_}
+$target2_32_arr = ($target2_arr[1]/312500) -split {$delim -contains $_}
+if ($target2_32_arr -eq 25) {
+    $target2_quarter = 2
+    }
+    elseif ($target2x_32_arr -eq 50) {
+    $target2_quarter = 5
+    }
+    elseif ($target2x_32_arr -eq 75) {
+    $target2_quarter = 7
+    }
+    else {$target2_quarter = 0}
+$target2_fr =  $target2_arr[0] + "'" + $target2_32_arr[0] + "." + $target2_quarter
+
+$target3_arr = $target3 -split {$delim -contains $_}
+$target3_32_arr = ($target3_arr[1]/312500) -split {$delim -contains $_}
+if ($target3_32_arr -eq 25) {
+    $target3_quarter = 2
+    }
+    elseif ($target3x_32_arr -eq 50) {
+    $target3_quarter = 5
+    }
+    elseif ($target3x_32_arr -eq 75) {
+    $target3_quarter = 7
+    }
+    else {$target3_quarter = 0}
+$target3_fr =  $target3_arr[0] + "'" + $target3_32_arr[0] + "." + $target3_quarter
+
+$target4_arr = $target4 -split {$delim -contains $_}
+$target4_32_arr = ($target4_arr[1]/312500) -split {$delim -contains $_}
+if ($target4_32_arr -eq 25) {
+    $target4_quarter = 2
+    }
+    elseif ($target4x_32_arr -eq 50) {
+    $target4_quarter = 5
+    }
+    elseif ($target4x_32_arr -eq 75) {
+    $target4_quarter = 7
+    }
+    else {$target4_quarter = 0}
+$target4_fr =  $target4_arr[0] + "'" + $target4_32_arr[0] + "." + $target4_quarter
+
+$target5_arr = $target5 -split {$delim -contains $_}
+$target5_32_arr = ($target5_arr[1]/312500) -split {$delim -contains $_}
+if ($target5_32_arr -eq 25) {
+    $target5_quarter = 2
+    }
+    elseif ($target5x_32_arr -eq 50) {
+    $target5_quarter = 5
+    }
+    elseif ($target5x_32_arr -eq 75) {
+    $target5_quarter = 7
+    }
+    else {$target5_quarter = 0}
+$target5_fr =  $target5_arr[0] + "'" + $target5_32_arr[0] + "." + $target5_quarter
+
 write-host "The entry $entry is",$entry_dec
 write-host "The exit $exit is",$exit_dec
-Write-Host "Target 1x is", $target1x
-Write-Host "Target 2x is", $target2x
-Write-Host "Target 3x is", $target3x
-Write-Host "Target 4x is", $target4x
-Write-Host "Target 5x is", $target5x
+Write-Host "Target 1x is", $target1_fr, $target1
+Write-Host "Target 2x is", $target2_fr, $target2
+Write-Host "Target 3x is", $target3_fr, $target3
+Write-Host "Target 4x is", $target4_fr, $target4
+Write-Host "Target 5x is", $target5_fr, $target5
