@@ -108,6 +108,29 @@ Write-Host "Target 3x is", $target_fraction3, $target3
 Write-Host "Target 4x is", $target_fraction4, $target4
 Write-Host "Target 5x is", $target_fraction5, $target5
 
+$price_table = @{
+    Target1 = @{
+        Fraction = $target_fraction1;
+        Decimal = $target1
+        }
+    Target2 = @{
+        Fraction = $target_fraction2;
+        Decimal = $target2
+        }
+    Target3 = @{
+        Fraction = $target_fraction3;
+        Decimal = $target3
+        }
+    Target4 = @{
+        Fraction = $target_fraction4;
+        Decimal = $target4
+        }
+    Target5 = @{
+        Fraction = $target_fraction5;
+        Decimal = $target5
+        }
+    }
+
 $pause = Read-Host "`nPress any key to continue"
 DO
 	{
