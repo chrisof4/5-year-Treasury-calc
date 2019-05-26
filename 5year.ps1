@@ -5,14 +5,23 @@
 #
 
 Clear-Host
-
+Write-Output "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
 # Define delimeters
 $delim = "'","."
-$entry_arr = @()
+$Entry_arr = @()
+
+# Create objects
+$EntryObj = New-Object -TypeName psobject
+$ExitObj = New-Object -TypeName psobject
+$ActivationObj = New-Object -TypeName psobject
+$TargetObj1 = New-Object -TypeName psobject
+$TargetObj2 = New-Object -TypeName psobject
+$TargetObj3 = New-Object -TypeName psobject
+$TargetObj4 = New-Object -TypeName psobject
+$TargetObj5 = New-Object -TypeName psobject
 
 # Define functions
 function user_input
-
        {
 		   [CmdletBinding()]
 				$script:entry = Read-Host "What is the entry price? Enter this in the format 999'99.99"
@@ -21,97 +30,119 @@ function user_input
 
 #Begin script execution
 user_input
-[decimal[]]$entry_arr = $entry -split {$delim -contains $_}
-[decimal[]]$exit_arr = $exit -split {$delim -contains $_}
-# Write-Host "The value of $entry_arr[2] after the split is", $entry_arr[2]
+[decimal[]]$Entry_arr = $Entry -split {$delim -contains $_}
+[decimal[]]$Exit_arr = $Exit -split {$delim -contains $_}
 
 # Data validation section
-if ($entry_arr[1] -lt 0 -or $entry_arr[1] -gt 31) {
+if ($Entry_arr[1] -lt 0 -or $Entry_arr[1] -gt 31) {
 			throw "Enter a valid price"
 			}
-		elseif( $entry_arr[2] -eq 0) { 
+		elseif( $Entry_arr[2] -eq 0) { 
 			$quarters_entry = 0
-			# write-host "if 0",$entry_arr[2]
+			# write-host "if 0",$Entry_arr[2]
 			}
-		elseif ( $entry_arr[2] -eq 2 ) { 
+		elseif ( $Entry_arr[2] -eq 2 ) { 
 			$quarters_entry = .0078125 
-			# write-host "if 2",$entry_arr[2]
+			# write-host "if 2",$Entry_arr[2]
 			}
-		elseif ( $entry_arr[2] -eq 5 ) { 
+		elseif ( $Entry_arr[2] -eq 5 ) { 
 			$quarters_entry = (.0078125 * 2) 
-			# write-host "if 5",$entry_arr[2]
+			# write-host "if 5",$Entry_arr[2]
 			}
-		elseif ( $entry_arr[2] -eq 7 ) { 
+		elseif ( $Entry_arr[2] -eq 7 ) { 
 			$quarters_entry = (.0078125 * 3) 
-			# write-host "if 7",$entry_arr[2]
+			# write-host "if 7",$Entry_arr[2]
 			}
 		else { throw "Enter a valid price" }
-if ($exit_arr[1] -lt 0 -or $exit_arr[1] -gt 31) {
+if ($Exit_arr[1] -lt 0 -or $Exit_arr[1] -gt 31) {
 			throw "Enter a valid price"
 			}
-		elseif( $exit_arr[2] -eq 0) { 
+		elseif( $Exit_arr[2] -eq 0) { 
 			$quarters_exit = 0
-			# write-host "if 0",$exit_arr[2]
+			# write-host "if 0",$Exit_arr[2]
 			}
-		elseif ( $exit_arr[2] -eq 2 ) { 
+		elseif ( $Exit_arr[2] -eq 2 ) { 
 			$quarters_exit = .0078125 
-			# write-host "if 2",$exit_arr[2]
+			# write-host "if 2",$Exit_arr[2]
 			}
-		elseif ( $exit_arr[2] -eq 5 ) { 
+		elseif ( $Exit_arr[2] -eq 5 ) { 
 			$quarters_exit = (.0078125 * 2) 
-			# write-host "if 5",$exit_arr[2]
+			# write-host "if 5",$Exit_arr[2]
 			}
-		elseif ( $exit_arr[2] -eq 7 ) { 
+		elseif ( $Exit_arr[2] -eq 7 ) { 
 			$quarters_exit = (.0078125 * 3) 
-			# write-host "if 7",$exit_arr[2]
+			# write-host "if 7",$Exit_arr[2]
 			}
 		else { throw "Enter a valid price" }
 
-$entry_dec = $entry_arr[0] + ($entry_arr[1] * .03125) + $quarters_entry
-$exit_dec = $exit_arr[0] + ($exit_arr[1] * .03125) + $quarters_exit
-$zone = $entry_dec - $exit_dec
+$Entry_dec = $Entry_arr[0] + ($Entry_arr[1] * .03125) + $quarters_entry
+$Exit_dec = $Exit_arr[0] + ($Exit_arr[1] * .03125) + $quarters_exit
+$zone = $Entry_dec - $Exit_dec
 if ($zone -lt 0) {
-			Write-Host "`nThis is a short trade`n"
+			Write-Host "`nThis is a short trade"
 				}
 		else {
-			Write-Host "`nThis is a long trade`n"
+			Write-Host "`nThis is a long trade"
 			}
 
 $x = 1
 DO
 {
-	New-Variable -name "target$x" -value ($entry_dec + ($zone * $x))
+	New-Variable -name "target$x" -value ($Entry_dec + ($zone * $x))
 	
-	$target = ($entry_dec + ($zone * $x))
-	$target_arr = ($target -split {$delim -contains $_})
-	$target_32_arr = ($target_arr[1]/312500) -split {$delim -contains $_}
-	if ($target_32_arr -eq 25) {
-		$target_quarter = 2
+	$Target = ($Entry_dec + ($zone * $x))
+	$Target_arr = ($Target -split {$delim -contains $_})
+	$Target_32_arr = ($Target_arr[1]/312500) -split {$delim -contains $_}
+	if ($Target_32_arr -eq 25) {
+		$Target_quarter = 2
 		}
-		elseif ($target_32_arr -eq 50) {
-		$target_quarter = 5
+		elseif ($Target_32_arr -eq 50) {
+		$Target_quarter = 5
 		}
-		elseif ($target_32_arr -eq 75) {
-		$target_quarter = 7
+		elseif ($Target_32_arr -eq 75) {
+		$Target_quarter = 7
 		}
-		else {$target_quarter = 0}
-	New-Variable -name "target_fraction$x" -value ($target_arr[0] + "'" + $target_32_arr[0] + "." + $target_quarter)
+		else {$Target_quarter = 0}
+	New-Variable -name "target_fraction$x" -value ($Target_arr[0] + "'" + $Target_32_arr[0] + "." + $Target_quarter)
 	$x++
 	} While ($x -le 5)
 $x--
 
-write-host "The entry $entry is",$entry_dec
-write-host "The exit $exit is",$exit_dec
-Write-Host "`nTarget 1x is", $target_fraction1, $target1
-Write-Host "Target 2x is", $target_fraction2, $target2
-Write-Host "Target 3x is", $target_fraction3, $target3
-Write-Host "Target 4x is", $target_fraction4, $target4
-Write-Host "Target 5x is", $target_fraction5, $target5
+$EntryObj | Add-Member -MemberType NoteProperty -Name "Price Type" -Value Entry
+$EntryObj | Add-Member -MemberType NoteProperty -Name Fraction -Value $Entry
+$EntryObj | Add-Member -MemberType NoteProperty -Name Decimal -Value $Entry_dec
 
-$pause = Read-Host "`nPress any key to continue"
+$ExitObj | Add-Member -MemberType NoteProperty -Name "Price Type" -Value Exit
+$ExitObj | Add-Member -MemberType NoteProperty -Name Fraction -Value $Exit
+$ExitObj | Add-Member -MemberType NoteProperty -Name Decimal -Value $Exit_dec
+
+$TargetObj1 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 1x"
+$TargetObj1 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction1
+$TargetObj1 | Add-Member -MemberType NoteProperty -Name Decimal -Value $Target1
+
+$TargetObj2 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 2x"
+$TargetObj2 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction2
+$TargetObj2 | Add-Member -MemberType NoteProperty -Name Decimal -Value $Target2
+
+$TargetObj3 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 3x"
+$TargetObj3 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction3
+$TargetObj3 | Add-Member -MemberType NoteProperty -Name Decimal -Value $Target3
+
+$TargetObj4 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 4x"
+$TargetObj4 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction4
+$TargetObj4 | Add-Member -MemberType NoteProperty -Name Decimal -Value $Target4
+
+$TargetObj5 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 5x"
+$TargetObj5 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction5
+$TargetObj5 | Add-Member -MemberType NoteProperty -Name Decimal -Value $Target5
+
+Write-Output $EntryObj, $ExitObj, $TargetObj1, $TargetObj2, $TargetObj3, $TargetObj4, $TargetObj5 
+
 DO
 	{
 		Remove-Variable "target$x"
 		Remove-Variable "target_fraction$x"
 		$x--
 	} While ($x -ge 1)
+
+# Read-Host -Prompt "Press Enter to exit"
