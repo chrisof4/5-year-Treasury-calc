@@ -112,7 +112,7 @@ if ($Confirmation_arr[2] -eq 0) {
 		elseif ( $Confirmation_arr[2] -eq 7 ) { 
 			$Quarters_confirmation = (.0078125 * 3) 
 			}
-$Confirmation_dec = $Confirmation_arr[0] + ($Confirmation_arr[1] * .03125) + $Quarters_Confirmation
+$Confirmation_dec = [decimal]$Confirmation_arr[0] + [decimal]($Confirmation_arr[1] * .03125) + [decimal]$Quarters_Confirmation
 
 if ($Zone -lt 0) {
 			Write-Host "`nThis is a short trade"
@@ -176,7 +176,7 @@ $TargetObj5 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Tar
 $TargetObj5 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction5
 $TargetObj5 | Add-Member -MemberType NoteProperty -Name Decimal -Value $Target5
 
-Write-Output $EntryObj, $ExitObj, $ConfirmationObj,$TargetObj1, $TargetObj2, $TargetObj3, $TargetObj4, $TargetObj5 
+Write-Output $EntryObj, $ExitObj, $ConfirmationObj, $TargetObj1, $TargetObj2, $TargetObj3, $TargetObj4, $TargetObj5 
 
 DO
 	{
