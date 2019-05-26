@@ -5,7 +5,7 @@
 #
 
 Clear-Host
-
+Write-Output "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
 # Define delimeters
 $delim = "'","."
 $Entry_arr = @()
@@ -79,10 +79,10 @@ $Entry_dec = $Entry_arr[0] + ($Entry_arr[1] * .03125) + $quarters_entry
 $Exit_dec = $Exit_arr[0] + ($Exit_arr[1] * .03125) + $quarters_exit
 $zone = $Entry_dec - $Exit_dec
 if ($zone -lt 0) {
-			Write-Host "`nThis is a short trade`n"
+			Write-Host "`nThis is a short trade"
 				}
 		else {
-			Write-Host "`nThis is a long trade`n"
+			Write-Host "`nThis is a long trade"
 			}
 
 $x = 1
@@ -136,7 +136,7 @@ $TargetObj5 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Tar
 $TargetObj5 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction5
 $TargetObj5 | Add-Member -MemberType NoteProperty -Name Decimal -Value $Target5
 
-Write-Output $EntryObj, $ExitObj, $TargetObj1, $TargetObj2, $TargetObj3, $TargetObj4, $TargetObj5
+Write-Output $EntryObj, $ExitObj, $TargetObj1, $TargetObj2, $TargetObj3, $TargetObj4, $TargetObj5 
 
 DO
 	{
