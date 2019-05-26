@@ -112,7 +112,7 @@ if ($Confirmation_arr[2] -eq 0) {
 		elseif ( $Confirmation_arr[2] -eq 7 ) { 
 			$Quarters_confirmation = (.0078125 * 3) 
 			}
-$Confirmation_dec = [decimal]$Confirmation_arr[0] + [decimal]($Confirmation_arr[1] * .03125) + [decimal]$Quarters_Confirmation
+$Confirmation_dec = [decimal]$Confirmation_arr[0] + ([decimal]$Confirmation_arr[1] * .03125) + [decimal]$Quarters_Confirmation
 
 if ($Zone -lt 0) {
 			Write-Host "`nThis is a short trade"
