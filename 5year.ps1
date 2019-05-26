@@ -129,13 +129,13 @@ DO
 	$Target = ($Entry_dec + ($Zone * $x))
 	$Target_arr = ($Target -split {$delim -contains $_})
 	$Target_32_arr = ($Target_arr[1]/312500) -split {$delim -contains $_}
-	if ($Target_32_arr -eq 25) {
+	if ($Target_32_arr[1] -eq 25) {
 		$Target_quarter = 2
 		}
-		elseif ($Target_32_arr -eq 50) {
+		elseif ($Target_32_arr[1] -eq 5) {
 		$Target_quarter = 5
 		}
-		elseif ($Target_32_arr -eq 75) {
+		elseif ($Target_32_arr[1] -eq 75) {
 		$Target_quarter = 7
 		}
 		else {$Target_quarter = 0}
