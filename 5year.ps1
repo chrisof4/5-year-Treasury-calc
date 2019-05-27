@@ -9,6 +9,10 @@ Write-Output "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
 # Define delimeters
 $delim = "'","."
 $Entry_arr = @()
+$TickMin = .0078125
+$TickValue = 7.8125
+$Fee = 2.15
+
 
 # Create objects
 $EntryObj = New-Object -TypeName psobject
