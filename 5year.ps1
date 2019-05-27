@@ -12,8 +12,8 @@ $Entry_arr = @()
 $TickMin = .0078125
 $TickValue = 7.8125
 $Fee = 4.30
-$Fees = ("{0:n2}" -f ($Fee * $Contracts))
-
+$Fees = $Fee * $Contracts
+$Fees = "{0:n2}" -f $Fees
 
 # Create objects
 $EntryObj = New-Object -TypeName psobject
