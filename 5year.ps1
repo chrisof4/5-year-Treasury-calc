@@ -12,6 +12,7 @@ $Entry_arr = @()
 $TickMin = .0078125
 $TickValue = 7.8125
 $Fee = 4.30
+$Fees = ("{0:n2}" -f ($Fee * $Contracts))
 
 
 # Create objects
@@ -83,7 +84,7 @@ if ($Exit_arr[1] -lt 0 -or $Exit_arr[1] -gt 31) {
 $Entry_dec = $Entry_arr[0] + ($Entry_arr[1] * .03125) + $quarters_entry
 $Exit_dec = $Exit_arr[0] + ($Exit_arr[1] * .03125) + $quarters_exit
 $Zone = $Entry_dec - $Exit_dec
-$Risk = ($Zone/$TickMin*$TickValue*$Contracts) + ($Fee * $Contracts)
+$Risk = ([math]::round((($Zone/$TickMin*$TickValue*$Contracts) + ($Fee * $Contracts)),2))
 $Reward = ($Zone/$TickMin * $TickValue * $Contracts) - ($Fee * $Contracts)
  
 # -- Calculate the confirmation entry price, also known as the activation price. --
@@ -128,6 +129,7 @@ if ($Zone -lt 0) {
 			Write-Host "`nThis is a long trade"
 			}
 Write-Host "`nThe risk for this trade is `$$Risk"
+Write-Host "`nThe total fees are `$$Fees"
 
 $x = 1
 DO
@@ -156,7 +158,7 @@ $x--
 
 $EntryObj | Add-Member -MemberType NoteProperty -Name "Price Type" -Value Entry
 $EntryObj | Add-Member -MemberType NoteProperty -Name Fraction -Value $Entry
-$EntryObj | Add-Member -MemberType NoteProperty -Name Decimal -Value $Entry_dec
+$EntryObj | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Entry_dec)
 $EntryObj | Add-Member -MemberType NoteProperty -Name Reward -Value "-"
 
 $ExitObj | Add-Member -MemberType NoteProperty -Name "Price Type" -Value Exit
