@@ -11,7 +11,7 @@ $delim = "'","."
 $Entry_arr = @()
 $TickMin = .0078125
 $TickValue = 7.8125
-$Fee = 2.15
+$Fee = 4.30
 
 
 # Create objects
@@ -28,9 +28,10 @@ $TargetObj5 = New-Object -TypeName psobject
 function user_input
        {
 		   [CmdletBinding()]
-				$script:entry = Read-Host "What is the entry price? Enter this in the format 999'99.99"
-				$script:exit = Read-Host "What is the exit price? Enter this in the format 999'99.99"
-              }
+		   $script:Entry = Read-Host "What is the entry price? Enter this in the format 999'99.99"
+		   $script:Exit = Read-Host "What is the exit price? Enter this in the format 999'99.99"
+		   [int]$script:Contracts = Read-Host "How many contracts?"
+		   }
 
 #Begin script execution
 user_input
@@ -147,6 +148,8 @@ DO
 	$x++
 	} While ($x -le 5)
 $x--
+
+$Risk = ($Zone/$TickMin*$TickValue*$Contracts) + ($Fee * $Contracts)
 
 $EntryObj | Add-Member -MemberType NoteProperty -Name "Price Type" -Value Entry
 $EntryObj | Add-Member -MemberType NoteProperty -Name Fraction -Value $Entry
