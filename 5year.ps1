@@ -9,15 +9,31 @@ function Get-Input {
 
      
      $Valid = $true
-     while ($Valid -eq $true) {
-        $UserInput = Read-Host $RequestInput
-        if ($UserInput -eq "") {
-            Write-Host "You did not enter anything."
-            }
-        else {
-            $Valid = $false
-            }
-        }
+	if ($RequestInput -eq "How many contracts?"){
+			while ($Valid -eq $true) {
+				$UserInput = Read-Host $RequestInput
+				if ($UserInput -eq "") {
+					Write-Host "You did not enter anything."
+					}
+				elseif ($UserInput -gt 0 -and $UserInput -le 100) {
+					$Valid = $false
+				}
+				else {
+					Write-Host "Enter a valid number"
+				}
+			}
+		}
+    else {
+			while ($Valid -eq $true) {
+				$UserInput = Read-Host $RequestInput
+				if ($UserInput -eq "") {
+					Write-Host "You did not enter anything."
+					}
+				else {
+					$Valid = $false
+				}
+			}
+		}
     return $UserInput
  }
 Clear-Host
@@ -25,7 +41,7 @@ Write-Host "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
 $Entry = Get-Input "What is the entry price? (###'##.##)"
 $Distal = Get-Input "What is the distal price? (###'##.##)"
 $Exit = Get-Input "What is the exit price? (###'##.##)"
-[int]$Contracts = Read-Host "How many contracts?"
+[int]$Contracts = Get-Input "How many contracts?"
 
 # Define delimeters
 $delim = "'","."
