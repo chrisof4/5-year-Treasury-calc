@@ -6,8 +6,9 @@
 
 Clear-Host
 Write-Output "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
-$Entry = Read-Host "What is the entry price? Enter this in the format 999'99.99"
-$Exit = Read-Host "What is the exit price? Enter this in the format 999'99.99"
+$Entry = Read-Host "What is the entry price? (###'##.##)"
+$Distal = Read-Host "What is the distal price? (###'##.##)"
+$Exit = Read-Host "What is the exit price? (###'##.##)"
 [int]$Contracts = Read-Host "How many contracts?"
 
 # Define delimeters
