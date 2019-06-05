@@ -67,6 +67,42 @@ function Get-Input {
 	$Decimal = $Fraction_arr[0] + ($Fraction_arr[1] * .03125) + $Quarters_entry
 	 return $Decimal
 }
+
+function Calculate-Targets-FR () {
+	[CmdletBinding()]
+    param($E, $Z)
+	$tempArray = @()
+	
+	for ($x = 0; $x -lt 5; $x++) {
+		$Target = ($E + ($Z * ($x+1)))
+		$Target_arr = ($Target -split {$delim -contains $_})
+		$Target_32_arr = ($Target_arr[1]/312500) -split {$delim -contains $_}
+		if ($Target_32_arr[1] -eq 25) {
+			$Target_quarter = 2
+			}
+			elseif ($Target_32_arr[1] -eq 5) {
+			$Target_quarter = 5
+			}
+			elseif ($Target_32_arr[1] -eq 75) {
+			$Target_quarter = 7
+			}
+			else {$Target_quarter = 0}
+		$tempArray += ($Target_arr[0] + "'" + $Target_32_arr[0] + "." + $Target_quarter)
+		}
+	return, $TempArray
+}
+
+function Calculate-Targets-Dec () {
+	[CmdletBinding()]
+    param($E, $Z)
+	$tempArray = @()
+	
+	for ($x = 0; $x -lt 5; $x++) {
+		$Target = ($E + ($Z * ($x+1)))
+		$tempArray += ($Target)
+		}
+	return, $TempArray
+}
 Clear-Host
 Write-Host "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
 $Entry = Get-Input "What is the entry price? (###'##.##)"
@@ -77,6 +113,7 @@ $Exit = Get-Input "What is the exit price? (###'##.##)"
 # Define delimeters
 $delim = "'","."
 $Entry_arr = @()
+$Target_Fraction = @()
 $TickMin = .0078125
 $TickValue = 7.8125
 $Fee = 4.30
@@ -145,29 +182,8 @@ if ($Zone -lt 0) {
 Write-Host "`nThe risk for this trade is `$$Risk"
 Write-Host "`nThe total fees are `$$FeesString"
 
-$x = 1
-DO
-{
-	New-Variable -name "target$x" -value ($Entry_dec + ($Zone * $x))
-	
-	$Target = ($Entry_dec + ($Zone * $x))
-	$Target_arr = ($Target -split {$delim -contains $_})
-	$Target_32_arr = ($Target_arr[1]/312500) -split {$delim -contains $_}
-	if ($Target_32_arr[1] -eq 25) {
-		$Target_quarter = 2
-		}
-		elseif ($Target_32_arr[1] -eq 5) {
-		$Target_quarter = 5
-		}
-		elseif ($Target_32_arr[1] -eq 75) {
-		$Target_quarter = 7
-		}
-		else {$Target_quarter = 0}
-	New-Variable -name "target_fraction$x" -value ($Target_arr[0] + "'" + $Target_32_arr[0] + "." + $Target_quarter)
-	$x++
-	} While ($x -le 5)
-$x--
-
+$Target_Fraction = Calculate-Targets-FR $Entry_dec $Zone
+$Target_Dec = Calculate-Targets-Dec $Entry_dec $Zone
 
 
 $EntryObj | Add-Member -MemberType NoteProperty -Name "Price Type" -Value Entry
@@ -191,37 +207,29 @@ $ConfirmationObj | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0
 $ConfirmationObj | Add-Member -MemberType NoteProperty -Name Reward -Value "-"
 
 $TargetObj1 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 1x"
-$TargetObj1 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction1
-$TargetObj1 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target1)
+$TargetObj1 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction[0]
+$TargetObj1 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target_Dec[0])
 $TargetObj1 | Add-Member -MemberType NoteProperty -Name Reward -Value ("{0:n2}" -f ($Reward - $Fees))
 
 $TargetObj2 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 2x"
-$TargetObj2 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction2
-$TargetObj2 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target2)
+$TargetObj2 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction[1]
+$TargetObj2 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target_Dec[1])
 $TargetObj2 | Add-Member -MemberType NoteProperty -Name Reward -Value ("{0:n2}" -f (($Reward *2)-$Fees))
 
 $TargetObj3 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 3x"
-$TargetObj3 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction3
-$TargetObj3 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target3)
+$TargetObj3 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction[2]
+$TargetObj3 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target_Dec[2])
 $TargetObj3 | Add-Member -MemberType NoteProperty -Name Reward -Value ("{0:n2}" -f (($Reward * 3) - $Fees))
 
 $TargetObj4 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 4x"
-$TargetObj4 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction4
-$TargetObj4 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target4)
+$TargetObj4 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction[3]
+$TargetObj4 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target_Dec[3])
 $TargetObj4 | Add-Member -MemberType NoteProperty -Name Reward -Value ("{0:n2}" -f (($Reward * 4) - $Fees))
 
 $TargetObj5 | Add-Member -MemberType NoteProperty -Name "Price Type" -Value "Target 5x"
-$TargetObj5 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction5
-$TargetObj5 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target5)
+$TargetObj5 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_fraction[4]
+$TargetObj5 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target_Dec[4])
 $TargetObj5 | Add-Member -MemberType NoteProperty -Name Reward -Value ("{0:n2}" -f (($Reward * 5) - $Fees))
 
 Write-Output $EntryObj, $DistalObj, $ExitObj, $ConfirmationObj, $TargetObj1, $TargetObj2, $TargetObj3, $TargetObj4, $TargetObj5 
 
-DO
-	{
-		Remove-Variable "target$x"
-		Remove-Variable "target_fraction$x"
-		$x--
-	} While ($x -ge 1)
-
-# Read-Host -Prompt "Press Enter to exit"
