@@ -11,30 +11,31 @@ function Get-Input {
      $Valid = $true
 	if ($RequestInput -eq "How many contracts?"){
 			while ($Valid -eq $true) {
-				$UserInput = Read-Host $RequestInput
-				if ($UserInput -eq "") {
+				[int]$UserInt = Read-Host $RequestInput
+				if ($UserInt -eq "") {
 					Write-Host "You did not enter anything."
 					}
-				elseif ($UserInput -gt 0 -and $UserInput -le 100) {
+				elseif ($UserInt -is [int]) {
 					$Valid = $false
 				}
 				else {
 					Write-Host "Enter a valid number"
 				}
 			}
+            return $UserInt
 		}
     else {
 			while ($Valid -eq $true) {
-				$UserInput = Read-Host $RequestInput
-				if ($UserInput -eq "") {
+				$UserString = Read-Host $RequestInput
+				if ($UserString -eq "") {
 					Write-Host "You did not enter anything."
 					}
 				else {
 					$Valid = $false
 				}
 			}
+            return $UserString
 		}
-    return $UserInput
  }
 Clear-Host
 Write-Host "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
