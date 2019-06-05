@@ -98,8 +98,9 @@ $TargetObj5 = New-Object -TypeName psobject
 
 #
 $Entry_dec = Calculate-Decimal $Entry
-$Exit_dec = $Exit_arr[0] + ($Exit_arr[1] * .03125) + $quarters_exit
-$Zone = $Entry_dec - $Exit_dec
+$Exit_dec = Calculate-Decimal $Exit
+$Distal_dec = Calculate-Decimal $Distal
+$Zone = $Entry_dec - $Distal_dec
 $Risk = ([math]::round((($Zone/$TickMin*$TickValue*$Contracts) + ($Fee * $Contracts)),2))
 $Reward = ($Zone/$TickMin * $TickValue * $Contracts)
  
