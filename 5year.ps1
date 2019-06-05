@@ -37,6 +37,36 @@ function Get-Input {
             return $UserString
 		}
  }
+
+ function Calculate-Decimal {
+    [CmdletBinding()]
+    param($Fraction)
+	$delim = "'","."
+	[decimal[]]$Fraction_arr = $Fraction -split {$delim -contains $_}
+
+	if ($Fraction_arr[1] -lt 0 -or $Fraction_arr[1] -gt 31) {
+				Write-Host "The middle number must be between 1 and 32"
+				return
+				}
+			elseif( $Fraction_arr[2] -eq 0) { 
+				$Quarters_entry = 0
+				}
+			elseif ( $Fraction_arr[2] -eq 2 ) { 
+				$Quarters_entry = .0078125 
+				}
+			elseif ( $Fraction_arr[2] -eq 5 ) { 
+				$Quarters_entry = (.0078125 * 2) 
+				}
+			elseif ( $Fraction_arr[2] -eq 7 ) { 
+				$Quarters_entry = (.0078125 * 3) 
+				}
+			else {
+				Write-Host "Enter a valid price"
+				return
+				}
+	$Decimal = $Fraction_arr[0] + ($Fraction_arr[1] * .03125) + $Quarters_entry
+	 return $Decimal
+}
 Clear-Host
 Write-Host "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
 $Entry = Get-Input "What is the entry price? (###'##.##)"
@@ -63,52 +93,11 @@ $TargetObj3 = New-Object -TypeName psobject
 $TargetObj4 = New-Object -TypeName psobject
 $TargetObj5 = New-Object -TypeName psobject
 
-[decimal[]]$Entry_arr = $Entry -split {$delim -contains $_}
-[decimal[]]$Exit_arr = $Exit -split {$delim -contains $_}
+#[decimal[]]$Entry_arr = $Entry -split {$delim -contains $_}
+#[decimal[]]$Exit_arr = $Exit -split {$delim -contains $_}
 
-# Data validation section
-if ($Entry_arr[1] -lt 0 -or $Entry_arr[1] -gt 31) {
-			throw "Enter a valid price"
-			}
-		elseif( $Entry_arr[2] -eq 0) { 
-			$quarters_entry = 0
-			# write-host "if 0",$Entry_arr[2]
-			}
-		elseif ( $Entry_arr[2] -eq 2 ) { 
-			$quarters_entry = .0078125 
-			# write-host "if 2",$Entry_arr[2]
-			}
-		elseif ( $Entry_arr[2] -eq 5 ) { 
-			$quarters_entry = (.0078125 * 2) 
-			# write-host "if 5",$Entry_arr[2]
-			}
-		elseif ( $Entry_arr[2] -eq 7 ) { 
-			$quarters_entry = (.0078125 * 3) 
-			# write-host "if 7",$Entry_arr[2]
-			}
-		else { throw "Enter a valid price" }
-if ($Exit_arr[1] -lt 0 -or $Exit_arr[1] -gt 31) {
-			throw "Enter a valid price"
-			}
-		elseif( $Exit_arr[2] -eq 0) { 
-			$quarters_exit = 0
-			# write-host "if 0",$Exit_arr[2]
-			}
-		elseif ( $Exit_arr[2] -eq 2 ) { 
-			$quarters_exit = .0078125 
-			# write-host "if 2",$Exit_arr[2]
-			}
-		elseif ( $Exit_arr[2] -eq 5 ) { 
-			$quarters_exit = (.0078125 * 2) 
-			# write-host "if 5",$Exit_arr[2]
-			}
-		elseif ( $Exit_arr[2] -eq 7 ) { 
-			$quarters_exit = (.0078125 * 3) 
-			# write-host "if 7",$Exit_arr[2]
-			}
-		else { throw "Enter a valid price" }
-
-$Entry_dec = $Entry_arr[0] + ($Entry_arr[1] * .03125) + $quarters_entry
+#
+$Entry_dec = Calculate-Decimal $Entry
 $Exit_dec = $Exit_arr[0] + ($Exit_arr[1] * .03125) + $quarters_exit
 $Zone = $Entry_dec - $Exit_dec
 $Risk = ([math]::round((($Zone/$TickMin*$TickValue*$Contracts) + ($Fee * $Contracts)),2))
