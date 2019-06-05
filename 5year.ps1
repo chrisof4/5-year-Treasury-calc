@@ -85,6 +85,7 @@ $FeesString = "{0:n2}" -f $Fees
 
 # Create objects
 $EntryObj = New-Object -TypeName psobject
+$DistalObj = New-Object -TypeName psobject
 $ExitObj = New-Object -TypeName psobject
 $ConfirmationObj = New-Object -TypeName psobject
 $TargetObj1 = New-Object -TypeName psobject
@@ -106,9 +107,9 @@ $Reward = ($Zone/$TickMin * $TickValue * $Contracts)
 # estimate, modifies the number so it properly ends in a quarter of a 32nd,
 # calculates the price as a fraction and then recalculates the fraction 
 # price into a decimal price.
-$Confirmation_estimate = $Entry_dec - $Distal_dec /2
+$Confirmation_estimate = $Entry_dec - (($Entry_dec - $Distal_dec) /2)
 [decimal[]]$Confirmation_est_arr = $Confirmation_estimate -split {$delim -contains $_}
-$Confirmation_32_arr = ($Confirmation_est_arr[1]/3125000) -split {$delim -contains $_}
+$Confirmation_32_arr = ($Confirmation_est_arr[1]/312500) -split {$delim -contains $_}
 	if ($Confirmation_32_arr[1] -le 25) {
 		$Confirmation_quarter = 2
 		}
@@ -174,6 +175,11 @@ $EntryObj | Add-Member -MemberType NoteProperty -Name Fraction -Value $Entry
 $EntryObj | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Entry_dec)
 $EntryObj | Add-Member -MemberType NoteProperty -Name Reward -Value "-"
 
+$DistalObj | Add-Member -MemberType NoteProperty -Name "Price Type" -Value Distal
+$DistalObj | Add-Member -MemberType NoteProperty -Name Fraction -Value $Distal
+$DistalObj | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Distal_dec)
+$DistalObj | Add-Member -MemberType NoteProperty -Name Reward -Value "-"
+
 $ExitObj | Add-Member -MemberType NoteProperty -Name "Price Type" -Value Exit
 $ExitObj | Add-Member -MemberType NoteProperty -Name Fraction -Value $Exit
 $ExitObj | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Exit_dec)
@@ -209,7 +215,7 @@ $TargetObj5 | Add-Member -MemberType NoteProperty -Name Fraction -Value $Target_
 $TargetObj5 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}" -f $Target5)
 $TargetObj5 | Add-Member -MemberType NoteProperty -Name Reward -Value ("{0:n2}" -f (($Reward * 5) - $Fees))
 
-Write-Output $EntryObj, $ExitObj, $ConfirmationObj, $TargetObj1, $TargetObj2, $TargetObj3, $TargetObj4, $TargetObj5 
+Write-Output $EntryObj, $DistalObj, $ExitObj, $ConfirmationObj, $TargetObj1, $TargetObj2, $TargetObj3, $TargetObj4, $TargetObj5 
 
 DO
 	{
