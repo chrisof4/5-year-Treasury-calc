@@ -92,15 +92,11 @@ $TargetObj2 = New-Object -TypeName psobject
 $TargetObj3 = New-Object -TypeName psobject
 $TargetObj4 = New-Object -TypeName psobject
 $TargetObj5 = New-Object -TypeName psobject
-
-#[decimal[]]$Entry_arr = $Entry -split {$delim -contains $_}
-#[decimal[]]$Exit_arr = $Exit -split {$delim -contains $_}
-
 #
 $Entry_dec = Calculate-Decimal $Entry
 $Exit_dec = Calculate-Decimal $Exit
 $Distal_dec = Calculate-Decimal $Distal
-$Zone = $Entry_dec - $Distal_dec
+$Zone = $Entry_dec - $Exit_dec
 $Risk = ([math]::round((($Zone/$TickMin*$TickValue*$Contracts) + ($Fee * $Contracts)),2))
 $Reward = ($Zone/$TickMin * $TickValue * $Contracts)
  
@@ -110,7 +106,7 @@ $Reward = ($Zone/$TickMin * $TickValue * $Contracts)
 # estimate, modifies the number so it properly ends in a quarter of a 32nd,
 # calculates the price as a fraction and then recalculates the fraction 
 # price into a decimal price.
-$Confirmation_estimate = $Entry_dec - ($Zone/2)
+$Confirmation_estimate = $Entry_dec - $Distal_dec /2
 [decimal[]]$Confirmation_est_arr = $Confirmation_estimate -split {$delim -contains $_}
 $Confirmation_32_arr = ($Confirmation_est_arr[1]/3125000) -split {$delim -contains $_}
 	if ($Confirmation_32_arr[1] -le 25) {
