@@ -103,6 +103,7 @@ function Calculate-Targets-Dec () {
 		}
 	return, $TempArray
 }
+
 Clear-Host
 Write-Host "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
 $Entry = Get-Input "What is the entry price? (###'##.##)"
@@ -114,6 +115,7 @@ $Exit = Get-Input "What is the exit price? (###'##.##)"
 $delim = "'","."
 $Entry_arr = @()
 $Target_Fraction = @()
+$Target_Dec = @()
 $TickMin = .0078125
 $TickValue = 7.8125
 $Fee = 4.30
@@ -173,6 +175,7 @@ if ($Confirmation_arr[2] -eq 0) {
 			}
 $Confirmation_dec = [decimal]$Confirmation_arr[0] + ([decimal]$Confirmation_arr[1] * .03125) + [decimal]$Quarters_Confirmation
 
+# Is trade long or short?
 if ($Zone -lt 0) {
 			Write-Host "`nThis is a short trade"
 				}
@@ -182,9 +185,9 @@ if ($Zone -lt 0) {
 Write-Host "`nThe risk for this trade is `$$Risk"
 Write-Host "`nThe total fees are `$$FeesString"
 
+# Calculate target prices
 $Target_Fraction = Calculate-Targets-FR $Entry_dec $Zone
 $Target_Dec = Calculate-Targets-Dec $Entry_dec $Zone
-
 
 $EntryObj | Add-Member -MemberType NoteProperty -Name "Price Type" -Value Entry
 $EntryObj | Add-Member -MemberType NoteProperty -Name Fraction -Value $Entry
