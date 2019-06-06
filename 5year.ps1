@@ -146,9 +146,9 @@ $Reward = ($Zone/$TickMin * $TickValue * $Contracts)
 # estimate, modifies the number so it properly ends in a quarter of a 32nd,
 # calculates the price as a fraction and then recalculates the fraction 
 # price into a decimal price.
-$Confirmation_estimate = $Entry_dec - (($Entry_dec - $Distal_dec) /2)
-[decimal[]]$Confirmation_est_arr = $Confirmation_estimate -split {$delim -contains $_}
-$Confirmation_32_arr = ($Confirmation_est_arr[1]/312500) -split {$delim -contains $_}
+$Confirmation_dec = $Entry_dec - ($TickMin *([math]::round((($Entry_dec - $Distal_dec) / $TickMin)/2)))
+[decimal[]]$Confirmation_dec_arr = $Confirmation_dec -split {$delim -contains $_}
+$Confirmation_32_arr = ($Confirmation_dec_arr[1]/312500) -split {$delim -contains $_}
 	if ($Confirmation_32_arr[1] -le 25) {
 		$Confirmation_quarter = 2
 		}
@@ -159,21 +159,7 @@ $Confirmation_32_arr = ($Confirmation_est_arr[1]/312500) -split {$delim -contain
 		$Confirmation_quarter = 7
 		}
 		else {$Confirmation_quarter = 0}
-$Confirmation_fraction =  ([string]$Confirmation_est_arr[0] + "'" + [string]$Confirmation_32_arr[0] + "." + [string]$Confirmation_quarter)
-$Confirmation_arr = $Confirmation_fraction -split {$delim -contains $_}
-if ($Confirmation_arr[2] -eq 0) { 
-			$Quarters_confirmation = 0
-			}
-		elseif ( $Confirmation_arr[2] -eq 2 ) { 
-			$Quarters_confirmation = .0078125 
-			}
-		elseif ( $Confirmation_arr[2] -eq 5 ) { 
-			$Quarters_confirmation = (.0078125 * 2) 
-			}
-		elseif ( $Confirmation_arr[2] -eq 7 ) { 
-			$Quarters_confirmation = (.0078125 * 3) 
-			}
-$Confirmation_dec = [decimal]$Confirmation_arr[0] + ([decimal]$Confirmation_arr[1] * .03125) + [decimal]$Quarters_Confirmation
+$Confirmation_fraction =  ([string]$Confirmation_dec_arr[0] + "'" + [string]$Confirmation_32_arr[0] + "." + [string]$Confirmation_quarter)
 
 # Is trade long or short?
 if ($Zone -lt 0) {
@@ -235,4 +221,3 @@ $TargetObj5 | Add-Member -MemberType NoteProperty -Name Decimal -Value ("{0:n7}"
 $TargetObj5 | Add-Member -MemberType NoteProperty -Name Reward -Value ("{0:n2}" -f (($Reward * 5) - $Fees))
 
 Write-Output $EntryObj, $DistalObj, $ExitObj, $ConfirmationObj, $TargetObj1, $TargetObj2, $TargetObj3, $TargetObj4, $TargetObj5 
-
