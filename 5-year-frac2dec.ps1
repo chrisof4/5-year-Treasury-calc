@@ -34,6 +34,6 @@ function Calculate-Decimal {
 Clear-Host
 Write-Host "Welcome To The Price Convertor For 5 Year Treasury Notes"
 Write-Host "This will convert a fractional price to a decimal price`n"
-$FracPrice = Get-Input "What is the fractional price? (###'##.##)"
+$FracPrice = Read-Host "What is the fractional price? (###'##.##)"
 $DecPrice = Calculate-Decimal $FracPrice
 Write-Host "`n$FracPrice converts to $DecPrice"
