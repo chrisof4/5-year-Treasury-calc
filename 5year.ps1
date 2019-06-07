@@ -104,6 +104,29 @@ function Calculate-Targets-Dec () {
 	return, $TempArray
 }
 
+function Calculate-Fractional {
+	[CmdletBinding()]
+    param($Decimal)
+    $delim = "'","."
+	
+		$Decimal_arr = ($Decimal -split {$delim -contains $_})
+        $Dec32 = "." + $Decimal_arr[1]
+		$Decimal_32_arr = [math]::Round(([decimal]($Dec32)*32),2) -split {$delim -contains $_}
+        
+		if ($Decimal_32_arr[1] -eq 25) {
+			$Decimal_quarter = 2
+			}
+		elseif ($Decimal_32_arr[1] -eq 50) {
+		$Decimal_quarter = 5
+		    }
+		elseif ($Decimal_32_arr[1] -eq 75) {
+		$Decimal_quarter = 7
+		    }
+		else {$Decimal_quarter = 0}
+		$Fraction = ($Decimal_arr[0] + "'" + $Decimal_32_arr[0] + "." + $Decimal_quarter)
+		return $Fraction
+}
+
 Clear-Host
 Write-Host "Welcome To The Price Calculator For 5 Year Treasury Notes`n"
 $Entry = Get-Input "What is the entry price? (###'##.##)"
@@ -147,19 +170,7 @@ $Reward = ($Zone/$TickMin * $TickValue * $Contracts)
 # calculates the price as a fraction and then recalculates the fraction 
 # price into a decimal price.
 $Confirmation_dec = $Entry_dec - ($TickMin *([math]::round((($Entry_dec - $Distal_dec) / $TickMin)/2)))
-[decimal[]]$Confirmation_dec_arr = $Confirmation_dec -split {$delim -contains $_}
-$Confirmation_32_arr = ($Confirmation_dec_arr[1]/312500) -split {$delim -contains $_}
-	if ($Confirmation_32_arr[1] -le 25) {
-		$Confirmation_quarter = 2
-		}
-		elseif ($Confirmation_32_arr[1] -le 50) {
-		$Confirmation_quarter = 5
-		}
-		elseif ($Confirmation_32_arr[1] -le 75) {
-		$Confirmation_quarter = 7
-		}
-		else {$Confirmation_quarter = 0}
-$Confirmation_fraction =  ([string]$Confirmation_dec_arr[0] + "'" + [string]$Confirmation_32_arr[0] + "." + [string]$Confirmation_quarter)
+$Confirmation_fraction =  Calculate-Fractional $Confirmation_dec
 
 # Is trade long or short?
 if ($Zone -lt 0) {
