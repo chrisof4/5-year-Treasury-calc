@@ -1,4 +1,4 @@
-﻿# File: 5year.ps1
+# File: 5year.ps1
 # Author: Chris Phillips
 # Creation Date: 2019-05-17
 
