@@ -39,3 +39,16 @@ if (($MenuChoice -ge 1) -and ($MenuChoice -le 4))
     }
 }
 while ($v -eq $false)
+if ($MenuChoice -eq 1)
+    {
+    .\5-year-frac2dec.ps1
+    }
+    elseif ($MenuChoice -eq 2)
+    {
+    .\5-year-dec2frac.ps1
+    }
+    elseif ($MenuChoice -eq 3) 
+    {
+    .\5-year-trade-calc.ps1
+    }
+    else {break}
