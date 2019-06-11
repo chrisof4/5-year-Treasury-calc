@@ -29,20 +29,27 @@ function Calculate-Fractional
     $delim = "'","."
 	
 		$Decimal_arr = ($Decimal -split {$delim -contains $_})
-        $Dec32 = "." + $Decimal_arr[1]
-		$Decimal_32_arr = [math]::Round(([decimal]($Dec32)*32),2) -split {$delim -contains $_}
+        if ($Decimal_arr.count -eq 1)
+            {
+                $Fraction = ("$Decimal_arr'00.00")
+                }
+        else
+            {
+                $Dec32 = "." + $Decimal_arr[1]
+		        $Decimal_32_arr = [math]::Round(([decimal]($Dec32)*32),2) -split {$delim -contains $_}
         
-		if ($Decimal_32_arr[1] -eq 25) {
-			$Decimal_quarter = 2
-			}
-		elseif ($Decimal_32_arr[1] -eq 50) {
-		$Decimal_quarter = 5
-		    }
-		elseif ($Decimal_32_arr[1] -eq 75) {
-		$Decimal_quarter = 7
-		    }
-		else {$Decimal_quarter = 0}
-		$Fraction = ($Decimal_arr[0] + "'" + $Decimal_32_arr[0] + "." + $Decimal_quarter)
+		        if ($Decimal_32_arr[1] -eq 25) {
+			        $Decimal_quarter = 2
+			        }
+		        elseif ($Decimal_32_arr[1] -eq 50) {
+		        $Decimal_quarter = 5
+		            }
+		        elseif ($Decimal_32_arr[1] -eq 75) {
+		        $Decimal_quarter = 7
+		            }
+		        else {$Decimal_quarter = 0}
+                $Fraction = ($Decimal_arr[0] + "'" + $Decimal_32_arr[0] + "." + $Decimal_quarter)
+            }
 		return $Fraction
 }
 
