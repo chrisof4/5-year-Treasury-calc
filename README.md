@@ -1,3 +1,6 @@
+# 5-year-UI.ps1
+This is a menu front end that provides easy access to the scripts below
+
 # 5-year-Trade-calc
 Calculate a trade for 5 Year Treasury Notes
 
@@ -17,7 +20,6 @@ Future versions may include such things as:
 
 5 year treasury prices are the most complex. Now that this version is stable, I may create a new project to calculate 10 year and 30 year treasury prices also. The user would get a menu asking which they want to calculate.
 
-# The following two scripts will probably be combined into one script once they are stable.
 # 5-year-frac2dec
 Convert a 5 year treasury note price from fraction to decimal.
 
