@@ -6,40 +6,49 @@ function Main-menu
     {
     [CmdletBinding()]
     param()
-    $v = $false
-
-    while ($v -eq $false)
-        {
-        Clear-Host
-        Write-Host "5 Year Treasury Tools`n"
-        Write-Host "1. Convert fractional price to decimal."
-        Write-Host "2. Convert decimal price to fractional."
-        Write-Host "3. Trade calculator."
-        Write-Host "4. Exit."
-        $Choice = Read-Host "`nPlease type the number for your choice:"
-        if (
-            ([string]$Choice -eq 1) -or
-            ([string]$Choice -eq 2) -or
-            ([string]$Choice -eq 3) -or
-            ([string]$Choice -eq 4)
-            )
-            {
-            return $Choice
-            $v = $true
-            }
-        else
-            {
-            Read-Host "Selection not valid. Press any key to continue"
-            }
     
+    Clear-Host
+    Write-Host "5 Year Treasury Tools`n"
+    Write-Host "1. Convert fractional price to decimal."
+    Write-Host "2. Convert decimal price to fractional."
+    Write-Host "3. Trade calculator."
+    Write-Host "4. Exit."
+
+	try 
+		{
+			[ValidateRange(1,4)]$Choice = Read-Host "`nPlease type the number for your choice:"
         }
+	catch
+		{
+			$x = Read-host "That is not a valid entry. Press any key to continue"
+		    continue
+		}
+	return $Choice
+
+  
     }
 
+$v = $false
+do
+{
 $MenuChoice = Main-menu
-Write-Host "$MenuChoice was chosen"
-#    $i = True
-#    Do 
-#    {
-#    } while ($i -is $True)
-#
-#.\5-year-dec2frac.ps1
+if (($MenuChoice -ge 1) -and ($MenuChoice -le 4))
+    {
+    Write-Host "$MenuChoice was chosen"
+    $v = $true
+    }
+}
+while ($v -eq $false)
+if ($MenuChoice -eq 1)
+    {
+    .\5-year-frac2dec.ps1
+    }
+    elseif ($MenuChoice -eq 2)
+    {
+    .\5-year-dec2frac.ps1
+    }
+    elseif ($MenuChoice -eq 3) 
+    {
+    .\5-year-trade-calc.ps1
+    }
+    else {break}
